@@ -3,11 +3,14 @@ read A		/* Input the values */
 read B
 
 /*****Perform the computations*****/
-sum := A+B
-dif := A-B
-mul := A*B
-div := A/B
+sum := A + B
+dif := A - B
+mod := A % B
+mul := A * B
+div := A / B
+
 write sum
 write dif
+write mod
 write mul
 write div

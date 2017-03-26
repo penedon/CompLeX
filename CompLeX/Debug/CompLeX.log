@@ -1,2 +1,18 @@
-﻿  CompLeX.vcxproj -> C:\Users\Gustavo\Documents\Visual Studio 2017\Projects\CompLeX\Debug\CompLeX.exe
-  CompLeX.vcxproj -> C:\Users\Gustavo\Documents\Visual Studio 2017\Projects\CompLeX\Debug\CompLeX.pdb (Partial PDB)
+﻿  Reco.cpp
+c:\users\gustavo\documents\visual studio 2017\projects\complex\complex\reco.cpp(177): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\gustavo\documents\visual studio 2017\projects\complex\complex\reco.cpp(178): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+e:\microsoft visual studio\2017\community\vc\tools\msvc\14.10.25017\include\utility(189): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+  c:\users\gustavo\documents\visual studio 2017\projects\complex\complex\reco.cpp(75): note: see reference to function template instantiation 'std::pair<std::string,int>::pair<std::string&,double&,void,0>(_Other1,_Other2) noexcept(false)' being compiled
+          with
+          [
+              _Other1=std::string &,
+              _Other2=double &
+          ]
+  c:\users\gustavo\documents\visual studio 2017\projects\complex\complex\reco.cpp(75): note: see reference to function template instantiation 'std::pair<std::string,int>::pair<std::string&,double&,void,0>(_Other1,_Other2) noexcept(false)' being compiled
+          with
+          [
+              _Other1=std::string &,
+              _Other2=double &
+          ]
+  CompLeX.vcxproj -> C:\Users\Gustavo\documents\visual studio 2017\Projects\CompLeX\Debug\CompLeX.exe
+  CompLeX.vcxproj -> C:\Users\Gustavo\documents\visual studio 2017\Projects\CompLeX\Debug\CompLeX.pdb (Partial PDB)

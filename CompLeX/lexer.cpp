@@ -22,7 +22,7 @@ void yytextclear()
 	yytext[yytextpos] = 0;
 }
 
-void yytextappend(int c) 
+void yytextappend(int c)
 {
 	if(yytextpos >= YYTEXT_MAX-1)
 		return;		// ignore char
@@ -41,13 +41,11 @@ int yylex()
 		yytextclear();
 
 		// Skip whitespace
-		while( (c = fin.get()) == ' ' || c == '\t')
-			;
-
+		while( (c = fin.get()) == ' ' || c == '\t' );
 	    
 		//if(c == EOF || c == '\n')	return EOFSY;		// Use \n as EOF sentinel
-		if (c == EOF || c == '\t') return EOFSY;
-		if (c == '\n') return EOLNSY;
+		if (c == EOF ) return EOFSY;
+		if (c == ';' || c == '\n') return EOLNSY;
 	
 		if (c == ':') {
 			yytextappend(c);
@@ -60,14 +58,16 @@ int yylex()
 		}
 	
 		
-		if ((c  >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
+		if ((c  >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) { //Only finds words
 			while (c != ' ') {
 				if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
 					yytextappend(c);
 					c = fin.get();
 
-					if (strcmp(yytext, "write") == 0)return WRITESY;
-					if (strcmp(yytext, "read") == 0)return READSY;
+
+
+					if (strcmp(yytext, "write") == 0)return WRITESY; //Write Function
+					if (strcmp(yytext, "read") == 0)return READSY;	//Read Function
 				}
 				else break;
 				
@@ -90,6 +90,7 @@ int yylex()
 		if(c == ')')	return RPAREN;
 		if(c == '+')	return ADDOP;
 		if(c == '-')	return SUBOP;
+		if(c == '%')	return MODOP;
 		if(c == '*')	return MULOP;
 		if (c == '/') {
 			c = fin.get();

@@ -48,8 +48,10 @@ void EGrammar()
 {
 	stackinit();
 	while ((tok = yylex()) != EOFSY) {
+		//cout << tok << endl; Shows token
 		S();
 		if (tok == EOFSY) match(EOFSY);
+		//if (tok == EOLNSY) match(EOLNSY);
 	}
 	match(EOFSY);
 
@@ -69,7 +71,7 @@ void S()
 		match(ID);
 		//cout << endl;
 		cin >> var;
-		cout << "USER INPUT TYPE: " << typeid(var).name() << '\n';
+		//cout << "USER INPUT TYPE: " << typeid(var).name() << '\n';
 		vars.insert(pair<string,int>(name, var));
 
 
@@ -168,33 +170,45 @@ void T()
 
 void Ftail()
 {
-if (tok == MULOP) {
-	match(MULOP);
-	F();
+	if (tok == MODOP) { // Convert to int (THIS SHOULD NOT HAPPEN)
+		match(MODOP);
+		F();
 
-	//cout << "MULOP" << endl; // output postfix
-	double v2 = pop(); // do the computation
-	double v1 = pop();
-	push(v1 * v2);
+		int v2 = pop(); // do the computation
+		int v1 = pop();
+		push(v1 % v2);
 
-	Ftail();
-	return;
+		Ftail();
+		return;
+	}
 
-}
+	if (tok == MULOP) {
+		match(MULOP);
+		F();
 
-if (tok == DIVOP) {
-	match(DIVOP);
-	F();
+		//cout << "MULOP" << endl; // output postfix
+		double v2 = pop(); // do the computation
+		double v1 = pop();
+		push(v1 * v2);
 
-	//cout << "DIVOP" << endl; // output postfix
-	double v2 = pop(); // do the computation
-	double v1 = pop();
-	push(v1 / v2);
+		Ftail();
+		return;
 
-	Ftail();
-	return;
+	}
 
-}
+	if (tok == DIVOP) {
+		match(DIVOP);
+		F();
+
+		//cout << "DIVOP" << endl; // output postfix
+		double v2 = pop(); // do the computation
+		double v1 = pop();
+		push(v1 / v2);
+
+		Ftail();
+		return;
+
+	}
 
 
 
@@ -226,13 +240,11 @@ void F()
 				//cout << val << endl; // output postfix
 				push(val); // do the computation
 				return;
-			}//match(EOLNSY);
-			/*if (tok == NEWLINE) {
-				match(NEWLINE);
-			}*/
-			else {
+			}
+			if (!tok == EOLNSY) {
 				cout << "SYNTAX ERROR: Token ( or numconst expected" << endl;
 			}
+
 
 				
 
