@@ -6,12 +6,16 @@
 
 
 void EGrammar();
+void FGrammar();
 void S();
 void E();
 void Ttail();
 void T();
 void Ftail();
 void F();
+void C();
+void Ctail();
+void Chead();
 
 
 int tok;
@@ -37,6 +41,7 @@ void match(int expectedTok)
 }
 
 map<string, double> vars;
+static int line;
 static double stack[100];
 static double top = 0;
 static void stackinit() { top = 0; }
@@ -48,7 +53,7 @@ void EGrammar()
 {
 	stackinit();
 	while ((tok = yylex()) != EOFSY) {
-		//cout << tok << endl; Shows token
+		//cout << tok << endl; //Shows token
 		S();
 		if (tok == EOFSY) match(EOFSY);
 		//if (tok == EOLNSY) match(EOLNSY);
@@ -58,6 +63,15 @@ void EGrammar()
 	//int val = pop();
 	//cout << "EGrammar E = " << val << endl;
 }
+void FGrammar()
+{
+	while ((tok = yylex()) != RBRCKT) {
+		//cout << tok << endl; //Shows token
+		S();
+	}
+	match(RBRCKT);
+}
+
 void S() 
 {
 	if (tok == READSY)
@@ -90,6 +104,42 @@ void S()
 		return;
 
 	}
+	if (tok == IFSY)
+	{
+		match(IFSY);
+		C();
+		double val = pop();
+		//cout << val << endl;
+		tok = yylex();
+		//cout << tok << endl;
+		if (tok == LBRCKT) {
+			match(LBRCKT);
+			if (val == 1)
+			{
+				cout << "TRUE CONDITION\n";
+				FGrammar();
+				cout << "END OF IF\n";
+				return;
+			}
+			else
+			{
+				cout << "FALSE CONDITION\n";
+				while (tok = yylex() != RBRCKT);
+			}
+		}
+		else
+		{
+			cout << "\tSYNTAX ERROR: missing { after )\n";
+			
+		}
+		
+		return;
+
+	}
+	/*if (tok == WHILESY) 
+	{
+			// FOR FUTURE VERSION
+	}*/
 	if (tok == ID)
 	{
 
@@ -251,6 +301,135 @@ void F()
 	
 
 }
+
+
+//Alpha 0.03 - Condition sub-process
+
+void C() {
+	Chead();
+	Ctail();
+}
+
+void Ctail() {
+	if (tok == GRTOP) {
+		match(GRTOP);
+		C();
+
+		double v2 = pop(); // do the computation
+		double v1 = pop();
+		double cond = 0;
+		if (v1 > v2) cond = 1;
+		else cond = 0; 
+		push(cond);
+
+		Ttail();
+		return;
+
+	}
+	if (tok == GRTEOP) {
+		match(GRTEOP);
+		C();
+
+		double v2 = pop(); // do the computation
+		double v1 = pop();
+		double cond = 0;
+		if (v1 >= v2) cond = 1;
+		else cond = 0;
+		push(cond);
+
+		Ttail();
+		return;
+
+	}
+	if (tok == LWROP) {
+		match(LWROP);
+		C();
+
+		double v2 = pop(); // do the computation
+		double v1 = pop();
+		double cond = 0;
+		if (v1 < v2) cond = 1;
+		else cond = 0;
+		push(cond);
+
+		Ttail();
+		return;
+
+	}
+	if (tok == LWREOP) {
+		match(LWREOP);
+		C();
+
+		double v2 = pop(); // do the computation
+		double v1 = pop();
+		double cond = 0;
+		if (v1 <= v2) cond = 1;
+		else cond = 0;
+		push(cond);
+
+		Ttail();
+		return;
+
+	}
+	if (tok == EQLOP) {
+		match(EQLOP);
+		C();
+
+		double v2 = pop(); // do the computation
+		double v1 = pop();
+		double cond = 0;
+		if (v1 == v2) cond = 1;
+		else cond = 0;
+		push(cond);
+
+		Ttail();
+		return;
+
+	}
+	if (tok == NEQLOP) {
+		match(NEQLOP);
+		C();
+
+		double v2 = pop(); // do the computation
+		double v1 = pop();
+		double cond = 0;
+		if (v1 != v2) cond = 1;
+		else cond = 0;
+		push(cond);
+
+		Ttail();
+		return;
+
+	}
+}
+
+void Chead() {
+	if (tok == LPAREN)
+	{
+		match(LPAREN);
+		C();
+		match(RPAREN);
+		return;
+	}
+	else
+		if (tok == ID)
+		{
+			push(vars.find(yytext)->second);
+			match(ID);
+			return;
+		}
+		else
+			if (tok == NUMCONST)
+			{
+				double val = atoi(yytext);
+				match(NUMCONST);
+				//cout << val << endl; // output postfix
+				push(val); // do the computation
+				return;
+			}
+}
+
+
 
 
 int yyparse()

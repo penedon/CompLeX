@@ -9,6 +9,14 @@ mod := A % B
 mul := A * B
 div := A / B
 
+
+if(A==B){
+	sum := A + B
+	dif := A - B
+}
+
+
+
 write sum
 write dif
 write mod

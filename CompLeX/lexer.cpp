@@ -65,7 +65,8 @@ int yylex()
 					c = fin.get();
 
 
-
+					if (strcmp(yytext, "if") == 0)return IFSY;
+					if (strcmp(yytext, "while") == 0)return WHILESY;
 					if (strcmp(yytext, "write") == 0)return WRITESY; //Write Function
 					if (strcmp(yytext, "read") == 0)return READSY;	//Read Function
 				}
@@ -88,6 +89,8 @@ int yylex()
 		yytextappend(c);
 		if(c == '(')	return LPAREN;
 		if(c == ')')	return RPAREN;
+		if(c == '{')	return LBRCKT;
+		if(c == '}')	return RBRCKT;
 		if(c == '+')	return ADDOP;
 		if(c == '-')	return SUBOP;
 		if(c == '%')	return MODOP;
@@ -110,8 +113,43 @@ int yylex()
 			fin.unget();
 			return DIVOP;
 		}
-		//if (c == ';') return NEWLINE;
-		//if(c == '/')	return DIVOP;
+		//if (c == '>') return GRTOP;
+		if (c == '>') {
+			c = fin.get();
+			if (c == '=') {
+				yytextappend(c);
+				return GRTEOP;
+			}
+			fin.unget();
+			return GRTOP;
+		}
+		if (c == '<') {
+			c = fin.get();
+			if (c == '=') {
+				yytextappend(c);
+				return LWREOP;
+			}
+			fin.unget();
+			return LWROP;
+		}
+		if (c == '=') { // May cause bug (example-> 2 ==@ 2)
+			yytextappend(c);
+			c = fin.get();
+			if (c == '=') {
+				yytextappend(c);
+				return EQLOP;
+			}
+			
+		}
+		else if (c == '!') {
+				yytextappend(c);
+				c = fin.get();
+				if (c == '=') {
+					yytextappend(c);
+					return NEQLOP;
+				}
+		}
+	
 
 
 
@@ -120,8 +158,19 @@ int yylex()
 		
 		if(c >= '0' && c <= '9')			// integer numeric constant?
 		{
-			while( ((c = fin.get()) >= '0' && c <= '9') || c == '.' )
-				yytextappend(c);
+			int dot = 0;
+			while (((c = fin.get()) >= '0' && c <= '9') || c == '.') {
+				if (c == '.') {
+					if (dot == 0) {
+						yytextappend(c); 
+						dot++;
+					}
+				}
+				else yytextappend(c);
+				
+				
+			}
+				
 
 			fin.unget();		// do not consume char following token
 			return NUMCONST;

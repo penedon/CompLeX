@@ -65,7 +65,6 @@ int main(int argc, char *argv[])
 	
 	cout << endl << endl << "Number of tokens = " << cont << endl;*/
 	 yyparse();
-	
 	system("pause");
 	return 0;
 }

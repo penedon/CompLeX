@@ -1,3 +1,18 @@
+--------------Alpha 0.10 --------------
+
+added:
+  - Function Support
+  - Support for IFSY ("IF(parameter){Grammar}")
+  - Support for Relational Operators
+	- >
+	- >=
+	- <
+	- <=
+	- ==
+	- !=
+  - Support for LBRCKT("{") and RBRCKT("}")
+
+
 --------------Alpha 0.02 --------------
 
 added:
