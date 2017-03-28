@@ -2,17 +2,12 @@
 Compiler designed for my Compilors class
 
 
-## Curent Version: Alpha 0.1.0
+## Curent Version: Alpha 0.1.1
 
 added:
-  - Function Support
-  - Support for IFSY ("IF(parameter){Grammar}")
-  - Support for Relational Operators
-	- >
-	- >=
-	- <
-	- <=
-	- ==
-	- !=
-  - Support for LBRCKT("{") and RBRCKT("}")
+  - Lexer can read ("&&","||","!","int","double","char"), but those functions aren't supported yet
+
+fixes:
+  - Minor code optimization
+
   

@@ -1,4 +1,12 @@
---------------Alpha 0.10 --------------
+--------------Alpha 0.1.1 --------------
+
+added:
+  - Lexer can read ("&&","||","!","int","double","char"), but those functions aren't supported yet
+
+fixes:
+  - Minor code optimization
+
+--------------Alpha 0.1 --------------
 
 added:
   - Function Support
@@ -13,7 +21,7 @@ added:
   - Support for LBRCKT("{") and RBRCKT("}")
 
 
---------------Alpha 0.02 --------------
+--------------Alpha 0.0.2 --------------
 
 added:
   - Support for punctuator(";")

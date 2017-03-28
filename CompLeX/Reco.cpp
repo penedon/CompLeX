@@ -14,6 +14,8 @@ void T();
 void Ftail();
 void F();
 void C();
+void L();
+void Ltail();
 void Ctail();
 void Chead();
 
@@ -142,34 +144,24 @@ void S()
 	}*/
 	if (tok == ID)
 	{
-
 		string name;
 		name = yytext;
 		match(ID);
 		if (tok == ASSIGNOP)
 		{
-			
 			match(ASSIGNOP);
-			
 			E();
-			
-			
 			double var = pop();
-			
 			vars.insert(pair<string, double>(name, var));
 			cout << "Assign: " << vars.find(name)->first << " = " << (vars.find(name)->second) << endl;
-
 			return;
-
 		}
 	}
 	if (tok == RCOMM) {
 		match(RCOMM);
-
 		return;
 	}
-	else
-		E();
+	else E();
 
 }
 void E()
@@ -199,13 +191,10 @@ void Ttail()
 	{
 		match(SUBOP);
 		T();
-
 		//cout << "SUBOP" << endl; // output postfix
 		double v2 = pop(); // do the computation
 		double v1 = pop();
 		push(v1 - v2);
-
-
 		Ttail();
 		return;
 	}
@@ -257,17 +246,11 @@ void Ftail()
 
 		Ftail();
 		return;
-
 	}
-
-
-
-
 }
 
 void F()
 {
-	
 	if (tok == LPAREN)
 	{
 		match(LPAREN);
@@ -294,20 +277,19 @@ void F()
 			if (!tok == EOLNSY) {
 				cout << "SYNTAX ERROR: Token ( or numconst expected" << endl;
 			}
-
-
-				
-
-	
-
 }
 
-
 //Alpha 0.03 - Condition sub-process
-
 void C() {
 	Chead();
 	Ctail();
+}
+
+void L() {
+
+}
+void Ltail() {
+
 }
 
 void Ctail() {

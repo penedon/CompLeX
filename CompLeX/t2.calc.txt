@@ -10,10 +10,11 @@ mul := A * B
 div := A / B
 
 
-if(A==B){
+if(A>=B){
 	sum := A + B
 	dif := A - B
 }
+
 
 
 
