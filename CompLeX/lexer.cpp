@@ -1,4 +1,4 @@
-// Egrammar Lexer
+
 
 #include "stdafx.h"
 #include "EGrammar.h"
