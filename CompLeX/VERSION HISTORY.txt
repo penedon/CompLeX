@@ -1,17 +1,31 @@
+--------------Alpha 0.2.1 --------------
+
+added:
+  - minor SYNTAX ERROR catchers in the code
+
+fixes:
+  - While function is properly working
+  - fixed a bug that was ignoring LPAREN ("(")
+
 --------------Alpha 0.2.0 --------------
 
 added:
-  - Support for WHILE Function
-  - Support for Logic Operators
-	- "&&"
-	- "||"
-	-
-fixes:
-  - 
+  - Support for logic operators
+	- ANDOP "&&"
+	- OROP  "||"
+	- NOTOP "!"
+  - Support for data types
+	- int
+	- double
+	- char
 
 bugs found:
-  - ASSIGNOP does not assign for the second time
-  - No support for going back in the TOKEN list
+  - While does not repeat tokens
+  - ID cannot increment itself
+
+todo:
+  - WRITE could print string
+  - more SYNTAX ERRORs
 
 --------------Alpha 0.1.1 --------------
 

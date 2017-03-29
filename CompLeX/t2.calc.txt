@@ -3,20 +3,18 @@ read A		/* Input the values */
 read B
 
 /*****Perform the computations*****/
-sum := A + B
-dif := A - B
-mod := A % B
-mul := A * B
-div := A / B
+double sum := A + B
+double dif := A - B
+double mod := A % B
+double mul := A * B
+double div := A / B
 
+/*if (2==3){write sum}*/
 
-if(A>=B){
-	sum := A + B
-	dif := A - B
+while(9!=10){
+	read C
+	write C
 }
-
-
-
 
 write sum
 write dif

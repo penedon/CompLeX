@@ -1,5 +1,3 @@
-// Egrammar declarations
-
 #ifndef _EGRAMMAR_H
 #define _EGRAMMAR_H
 
@@ -13,10 +11,12 @@ enum EgrammarTokens {
 	//ALPHA VERSION STUFF
 	MODOP,
 	GRTOP, LWROP, GRTEOP, LWREOP, EQLOP, NEQLOP, //16:21
-	IFSY, WHILESY, //21,23
+	IFSY, WHILESY, //22,23
 	LBRCKT, RBRCKT, //24,25
 	ANDOP, OROP, NOTOP, //26:28
-	INTTP, DOUBLETP, CHARTP //29:31
+	INTTP, DOUBLETP, CHARTP, //29:31
+
+	RSTRING
 
 };
 
@@ -29,5 +29,9 @@ void yytextappend(int c);
 int yylex();
 
 int yyparse();
+
+int lexpos();
+void goToPos(int num);
+void printTok(int token);
 
 #endif

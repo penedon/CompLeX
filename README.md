@@ -2,22 +2,11 @@
 Compiler designed for my Compilors class
 
 
-## Curent Version: Alpha 0.2.0
+## Curent Version: Alpha 0.2.1
 
 added:
-  - Support for logic operators
-	- ANDOP "&&"
-	- OROP  "||"
-	- NOTOP "!"
-  - Support for data types
-	- int
-	- double
-	- char
+  - minor SYNTAX ERROR catchers in the code
 
-bugs found:
-  - While does not repeat tokens
-  - ID cannot increment itself
-
-todo:
-  - WRITE could print string
-  - more SYNTAX ERRORs
+fixes:
+  - While function is properly working
+  - fixed a bug which was ignoring LPAREN ("(")
