@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "EGrammar.h"
 #include <iomanip>
 #include <iostream>

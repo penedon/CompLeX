@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "EGrammar.h"
 #include <iomanip>
 #include <string>
@@ -130,8 +129,8 @@ int yylex()
 		}
 
 		yytextappend(c);
+		//=================================== MATH OPERATORS ===================================//
 		if(c == '(')	return LPAREN;
-
 		if(c == ')')	return RPAREN;
 		if(c == '{')	return LBRCKT;
 		if(c == '}')	return RBRCKT;
@@ -155,12 +154,14 @@ int yylex()
 			fin.unget();
 			return DIVOP;
 		}
+		//==================================== STRING (WiP) ===================================//
 		if (c == '"') {
 			while (c != '"') {
 				c = fin.get();
 			}
 			return RSTRING;
 		}
+		//===================================LOGIC OPERATORS===================================//
 		if (c == '>' || c == '<' || c == '=' || c == '!' || c == '&' || c == '|') {
 			c = fin.get();
 			if (c == '='|| c == '&' || c =='|') {
@@ -177,7 +178,7 @@ int yylex()
 			if (strcmp(yytext, "<") == 0)return LWROP;
 			if (strcmp(yytext, "!") == 0)return NOTOP;
 		}
-		
+		//==================================== Numbers =======================================//
 		if(c >= '0' && c <= '9')			// integer numeric constant
 		{
 			int dot = 0;

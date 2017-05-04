@@ -1,3 +1,20 @@
+--------------Alpha 0.3.0 --------------
+
+added:
+  - Increment support
+  - Syntax error catchers
+  - Math error catchers
+  - Semantic error catchers
+  - Error handling function
+
+fixes:
+  - division by 0 does not interrupt the compiler anymore
+  - Variable needs a type to be declared
+  - READ can change a value from previously declared var
+  - WHILE can increment it's own condition variable
+  - Removed some IF bugs
+
+
 --------------Alpha 0.2.1 --------------
 
 added:

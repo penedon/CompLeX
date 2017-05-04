@@ -1,0 +1,33 @@
+/*t1.calc*/
+double A
+double B
+int C := 0
+read A		/* Input the values */
+read B
+
+/*****Perform the computations*****/
+double sum := A + B
+double dif := A - B
+double mod := A % B
+double mul := A * B
+double div := A / B
+
+
+A := A + 1
+write A
+
+if (A==3){
+	write sum
+}
+
+
+
+while(C!=10){
+	C := C + 1
+}
+
+write sum
+write dif
+write mod
+write mul
+write div

@@ -1,9 +1,10 @@
-
-#include "stdafx.h"
 #include "EGrammar.h"
 #include <map>
 #include <string>
 #include <iostream>
+
+#define DEBUGMODE 1 //Turn it on to DEBUG code
+#define ERRORSTOP 1 //Stops compiler when an error is found
 
 void EGrammar();
 void FGrammar();
@@ -21,6 +22,18 @@ void C();
 
 int tok;
 
+void error() {
+	if (ERRORSTOP) {
+		cout << "\n\t Compiler has stopped due to an error\n\n";
+		if (_WIN32) system("pause");
+		else {
+			cout << "Press Enter to finish";
+			while (getchar() != '\n');
+		}
+		exit(1);
+	}
+}
+
 void match(int expectedTok)
 {
 	if (tok == expectedTok)
@@ -33,6 +46,8 @@ void match(int expectedTok)
 		cout << "Token " << expectedTok
 			<< " expected, but instead "
 			<< "encountered " << yytext << endl;
+		error();
+		
 	}
 }
 map<string, string> varsType;
@@ -72,14 +87,19 @@ void S()
 		double var;
 		string name;
 		match(READSY);
-		cout << "Read: Enter Value for ";
+		if (DEBUGMODE) cout << "READ: ";
+		cout << "Enter Value for ";
 		cout << yytext << "> ";
 		name = yytext;
 		match(ID);
 		//cout << endl;
 		cin >> var;
 		//cout << "USER INPUT TYPE: " << typeid(var).name() << '\n';
-		vars.insert(pair<string, int>(name, var));
+		if (vars.find(name) == vars.end()) {
+			cout << "\nSEMANTIC ERROR: " << name << " is undeclared.\n";//vars.insert(pair<string, int>(name, var));
+			error();
+		}
+		else vars.find(name)->second = var; //
 		return;
 
 	}		
@@ -87,7 +107,7 @@ void S()
 	{
 		
 		match(WRITESY);
-		cout << "Write: "; 
+		if(DEBUGMODE) cout << "Write: "; 
 		E(); 
 		double val = pop();
 		cout << val << endl;
@@ -101,28 +121,28 @@ void S()
 		B();
 		double val = pop();
 		//cout << val << endl;
-		tok = yylex();
+		//tok = yylex();
 		//cout << tok << endl;
 		if (tok == LBRCKT) {
 			match(LBRCKT);
 			if (val == 1)
 			{
-				cout << "TRUE CONDITION\n";
+				if (DEBUGMODE) cout << "IF: TRUE CONDITION\n";
 				
 				FGrammar();
-				cout << "END OF IF\n";
+				if (DEBUGMODE) cout << "END OF IF\n";
 				return;
 			}
 			else
 			{
-				cout << "FALSE CONDITION\n";
+				if (DEBUGMODE) cout << "IF: FALSE CONDITION\n";
 				while (tok = yylex() != RBRCKT);
 			}
 		}
 		else
 		{
 			cout << "\tSYNTAX ERROR: missing { after )\n";
-			
+			error();
 		}
 		
 		return;
@@ -135,7 +155,10 @@ void S()
 		match(WHILESY);
 		while (1) {
 			while (tok == 1) tok = yylex();
-			if (tok != LPAREN) cout << "\tSYNTAX ERROR: missing ( after while\n";
+			if (tok != LPAREN) {
+				cout << "\tSYNTAX ERROR: missing ( after while\n";
+				error();
+			}
 			B();
 			double val = pop();
 			//cout << val << endl;
@@ -143,29 +166,30 @@ void S()
 				match(LBRCKT);
 				if (val == 1)
 				{
-					cout << "TRUE CONDITION - " << currpos << "\n";
+					if (DEBUGMODE) cout << "TRUE CONDITION - " << currpos << "\n";
 					FGrammar();
-					cout << "END OF CYCLE - " << lexpos() << "\n";
+					if (DEBUGMODE) cout << "END OF CYCLE - " << lexpos() << "\n";
 					goToPos(currpos);
 				}
 				if (val == 0)
 				{
-					cout << "FALSE CONDITION - BREAK\n";
-					break;
+					if (DEBUGMODE) cout << "FALSE CONDITION - BREAK\n";
 					while (tok = yylex() != RBRCKT);
+					break;
 				}
 				else goToPos(currpos);
 			}
 			else
 			{
 				cout << "\tSYNTAX ERROR: missing { after )\n";
+				error();
 			}
 		}
 		return;
 	}
-	if (tok == INTTP || tok == DOUBLETP || tok == CHARTP)
+	if (tok == INTTP || tok == DOUBLETP || tok == CHARTP || tok == ID) // Var declaration
 	{
-		string type;
+		string type = "NOTYPE";
 		if (tok == INTTP) {
 			type = "int"; match(INTTP);
 		}
@@ -174,23 +198,41 @@ void S()
 		}
 		else if (tok == CHARTP) {
 			type = "char"; match(CHARTP);
-		}
-		if (tok == ID) 
-		{
+		}////Note: Needs to check if theres a type or not. TRUE -> assign or not FALSE -> Check if var exists, if it does not, REPORT ERROR
+		if (tok == ID) {
 			string name;
 			name = yytext;
-			varsType.insert(pair<string, string>(name, type));
+
+			if (varsType.find(yytext) == varsType.end()) { // Never declared before
+				if (type == "NOTYPE") {
+					cout << "SEMANTIC ERROR: Type not declared \n";
+					error();
+				}
+				else varsType.insert(pair<string, string>(name, type));
+			}
+			//.fix
 			match(ID);
-			if (tok == ASSIGNOP)
-			{
+			if (tok == ASSIGNOP){
 				match(ASSIGNOP);
 				E();
 				double var = pop();
+				//cout << "\nStack: " << var << "\n";
 				if (type == "int") var = (int)var;
 				if (type == "char") var = (char)var;
-				vars.insert(pair<string, double>(name, var));
-				cout << "Assign: " << varsType.find(name)->second<<" "<< vars.find(name)->first << " = " << (vars.find(name)->second) << endl;
+
+				if (vars.find(name) == vars.end()) vars.insert(pair<string, double>(name, var));
+				else vars.find(name)->second = var;
+
+				if (DEBUGMODE) cout << "Assign: " << varsType.find(name)->second<<" "<< vars.find(name)->first << " = " << (vars.find(name)->second) << endl;
 				return;
+			}
+			else if (tok == EOLNSY) {
+				if (vars.find(name) == vars.end()) vars.insert(pair<string, double>(name, NULL));
+				return;
+			}
+			else {
+				cout << "\nSYNTAX ERROR: missing assign operator \":=\"\n";
+				error();
 			}
 		}
 		
@@ -253,7 +295,11 @@ void Ftail()
 
 		int v2 = pop(); // do the computation
 		int v1 = pop();
-		push(v1 % v2);
+		if (v2 == 0) {
+			cout << "\nMATH ERROR: Cannot divide by 0\n";
+			error();
+		}
+		else push(v1 % v2);
 
 		Ftail();
 		return;
@@ -280,7 +326,11 @@ void Ftail()
 		//cout << "DIVOP" << endl; // output postfix
 		double v2 = pop(); // do the computation
 		double v1 = pop();
-		push(v1 / v2);
+		if (v2 == 0) {
+			cout << "\nMATH ERROR: Cannot divide by 0\n";
+			error();
+		}
+		else push(v1 / v2);
 
 		Ftail();
 		return;
@@ -314,6 +364,7 @@ void F()
 			}
 			if (!tok == EOLNSY) {
 				cout << "SYNTAX ERROR: Token ( or numconst expected" << endl;
+				error();
 			}
 }
 
